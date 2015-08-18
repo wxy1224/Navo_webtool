@@ -1,0 +1,78 @@
+body{
+	font-family: Arial;
+	margin: 0px;
+	padding: 0px;
+}
+.indexcontent{
+	width: 98%;
+	margin-left: 2%;
+	margin-top: 30px;
+}
+.menu{
+	width: 100%;
+
+}
+#menuform{
+	border-color: black;
+	height: 50px;
+	padding: 5px;
+	width: 90%;
+	margin-left: 5%;
+	min-width: 300px;
+
+}
+.menuitem{
+	margin-right: 3%;
+	float: left;
+	font-size: 20px;
+}
+.information{
+	margin-bottom: 20px;
+}
+
+.display{
+	width: 100%;
+	overflow: auto;
+	display: block;
+
+}
+#map{
+	position: relative;
+}
+.clearer { clear: both; }
+#map, #form{
+	float: left;
+	display: inline-block;
+}
+#map{
+	margin-right: 30px;
+}
+#form{
+	width: 450px;
+}
+.canvas-container{
+	overflow: auto;
+}
+.line{
+	line-height: 30px;
+}
+.x, .y{
+	float: left;
+	width: 250px;
+}
+
+.width, .height{
+	float: left;
+	width: 250px;
+}
+
+.roomid, .roomname{
+	float: left;
+	width: 250px;
+}
+
+
+#form_dbl{
+	float: right;
+	margin-right: 50px;
+}
