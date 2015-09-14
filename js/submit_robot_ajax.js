@@ -51,8 +51,8 @@ $(document).ready(function() {
                         console.log("include head not include tail "+j);
                         x = x1_val+(x2_val-x1_val)*j/divide_num;
                         y = y1_val+(y2_val-y1_val)*j/divide_num;
-                        x = x.toFixed(3);
-                        y = y.toFixed(3);
+                        x = parseFloat(x.toFixed(3));
+                        y = parseFloat(y.toFixed(3));
                         array.push(new point(x,y,1));
                     }
                 }else{
@@ -60,8 +60,8 @@ $(document).ready(function() {
                         console.log("include head include tail "+j);
                         x = x1_val+(x2_val-x1_val)*j/divide_num;
                         y = y1_val+(y2_val-y1_val)*j/divide_num;
-                        x = x.toFixed(3);
-                        y = y.toFixed(3);
+                        x = parseFloat(x.toFixed(3));
+                        y = parseFloat(y.toFixed(3));
                         array.push(new point(x,y,1));
                     } 
                 }
@@ -81,8 +81,8 @@ $(document).ready(function() {
                         console.log("not include head include tail "+j);
                         x = x1_val+(x2_val-x1_val)*(j+1)/divide_num;
                         y = y1_val+(y2_val-y1_val)*(j+1)/divide_num;
-                        x = x.toFixed(3);
-                        y = y.toFixed(3);
+                        x = parseFloat(x.toFixed(3));
+                        y = parseFloat(y.toFixed(3));
                         array.push(new point(x,y,1));
                     }
                 }else{
@@ -90,8 +90,8 @@ $(document).ready(function() {
                         console.log("not include head not include tail "+j);
                         x = x1_val+(x2_val-x1_val)*(j+1)/divide_num;
                         y = y1_val+(y2_val-y1_val)*(j+1)/divide_num;
-                        x = x.toFixed(3);
-                        y = y.toFixed(3);
+                        x = parseFloat(x.toFixed(3));
+                        y = parseFloat(y.toFixed(3));
                         array.push(new point(x,y,1));
                     } 
                 } 

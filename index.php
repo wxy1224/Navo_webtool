@@ -87,7 +87,7 @@ if(isset($_POST["choose"]) || isset($_POST["chs_connector"]) || isset($_POST["db
 			$floor2_height_meter = $floor2row["height"];
 
 
-			$getgeoquery2 = "SELECT * FROM cornell_map_server_room WHERE building_id = $sel_buildingid and floor_number = $floor2_number";
+			$getgeoquery2 = "SELECT * FROM cornell_map_server_geometry WHERE building_id = $sel_buildingid and floor_number = $floor2_number";
 			$getgeoresult2 = $mysqli->query($getgeoquery2);
 		}else{
 			$dbl_con_error = "error";
@@ -253,7 +253,7 @@ if(isset($_POST["choose"]) || isset($_POST["chs_connector"]) || isset($_POST["db
 
 						echo '<canvas id="mapcanvas3" width = "'.$img2_width.'" height = "'.$img2_height.'" style = "position: absolute; left: 50; top: '.$pos_top.'px; z-index = 0; background-image: url('.$image_url2.');" ></canvas>';
 						echo '<canvas id="mapcanvas6" width = "'.$img2_width.'" height = "'.$img2_height.'" style = "position: absolute; left: 50; top: '.$pos_top.'px; z-index = 1;"></canvas>';						
-						echo '<canvas id="mapcanvas4" width = "'.$img2_width.'" height = "'.$img2_height.'" style = "position: absolute; left: 50; top: '.$pos_top.'px; z-index = 1;"></canvas>';
+						echo '<canvas id="mapcanvas4" width = "'.$img2_width.'" height = "'.$img2_height.'" style = "position: absolute; left: 50; top: '.$pos_top.'px; z-index = 2;"></canvas>';
 
 						?>
 
@@ -277,10 +277,9 @@ if(isset($_POST["choose"]) || isset($_POST["chs_connector"]) || isset($_POST["db
 
 					<script>
 
-					//var canvas = new fabric.Canvas('mapcanvas5');
 					var canvas_reg = document.getElementById("mapcanvas5");
 					var context = canvas_reg.getContext("2d");
-					var canvas = new fabric.Canvas('mapcanvas3');
+					//var canvas = new fabric.Canvas('mapcanvas3');
 					var img_width = <?php echo $img_width; ?>;
 					var img_height = <?php echo $img_height; ?>;
 
@@ -321,7 +320,7 @@ if(isset($_POST["choose"]) || isset($_POST["chs_connector"]) || isset($_POST["db
 						context.strokeStyle = colors[get_geo_type];
 
 						context.beginPath();
-						console.log(get_poly_pts);
+						//console.log(get_poly_pts);
 						pt0 = get_poly_pts[0];
 						pt0_x = pt0.x/floor_width_meter*img_width;
 						pt0_y = (floor_height_meter - pt0.y)/floor_height_meter*img_height;
@@ -337,10 +336,10 @@ if(isset($_POST["choose"]) || isset($_POST["chs_connector"]) || isset($_POST["db
 						context.fill();
 
 						var poly_center = getCentroid(get_poly_pts);
-						context.font = "20px Comic Sans MS";
+						context.font = "8px Comic Sans MS";
 						context.fillStyle = "black";
 						context.textAlign = "center";
-						context.fillText(get_geo_name+"     "+get_geo_uid, poly_center.x/floor_width_meter*img_width, (floor_height_meter - poly_center.y)/floor_height_meter*img_height); 
+						context.fillText(get_geo_name+" "+get_geo_uid, poly_center.x/floor_width_meter*img_width, (floor_height_meter - poly_center.y)/floor_height_meter*img_height); 
 						
 						</script>
 						<?php
@@ -402,40 +401,52 @@ if(isset($_POST["choose"]) || isset($_POST["chs_connector"]) || isset($_POST["db
 
 					if($image_url2!=""){
 						$geometry_row = $getgeoresult2->fetch_assoc();
-						while($geometry_row){
-							$get_geo_intro = $geometry_row["introduction"];
-							$get_geo_pts_str = $geometry_row["geometry"];
-							$get_geo_pts_json = json_encode($get_geo_pts_str);
-							$get_geo_type = $geometry_row["geometry_type"];
-							$get_geo_pts = json_decode($get_geo_pts_str);
-							?>
-							<script>
-							var get_poly_pts = <?php echo $get_geo_pts_json; ?>;
-							var get_geo_type = <?php echo $get_geo_type; ?>;
-							var get_poly_pts = JSON.parse(get_poly_pts);
+					while($geometry_row){
+						$get_geo_intro = $geometry_row["introduction"];
+						$get_geo_pts_str = $geometry_row["geometry"];
+						$get_geo_name = $geometry_row["introduction"];
+						$get_geo_uid = $geometry_row["uid"];
+						$get_geo_pts_json = json_encode($get_geo_pts_str);
+						$get_geo_type = $geometry_row["geometry_type"];
+						$get_geo_pts = json_decode($get_geo_pts_str);
+						?>
+						<script>
+						var get_poly_pts = <?php echo $get_geo_pts_json; ?>;
+						var get_geo_type = <?php echo $get_geo_type; ?>;
+						var get_poly_pts = JSON.parse(get_poly_pts);
+						var get_geo_name = "<?php echo $get_geo_name; ?>";
+						var get_geo_uid = <?php echo $get_geo_uid; ?>;
 
-							context.fillStyle = colors[get_geo_type];
+						context2.fillStyle = colors[get_geo_type];
+						context2.strokeStyle = colors[get_geo_type];
 
-							context.beginPath();
-							console.log(get_poly_pts);
-							pt0 = get_poly_pts[0];
-							pt0_x = pt0.x/floor_width_meter*img_width;
-							pt0_y = (floor_height_meter - pt0.y)/floor_height_meter*img_height;
-							context.moveTo(pt0_x, pt0_y);
-							for(var i = 1; i<get_poly_pts.length; i++){
-								pt = get_poly_pts[i];
-								pt_x = pt.x/floor_width_meter*img_width;
-								pt_y = (floor_height_meter - pt.y)/floor_height_meter*img_height;
-								context.lineTo(pt_x, pt_y);
-							}
-							context.closePath();
-							context.fill();
-							</script>
-							<?php
-							$geometry_row = $getgeoresult2->fetch_assoc();
+						context2.beginPath();
+						//console.log(get_poly_pts);
+						pt0 = get_poly_pts[0];
+						pt0_x = pt0.x/floor_width_meter*img_width;
+						pt0_y = (floor_height_meter - pt0.y)/floor_height_meter*img_height;
+						context2.moveTo(pt0_x, pt0_y);
+						for(var i = 1; i<get_poly_pts.length; i++){
+							pt = get_poly_pts[i];
+							pt_x = pt.x/floor_width_meter*img_width;
+							pt_y = (floor_height_meter - pt.y)/floor_height_meter*img_height;
+							context2.lineTo(pt_x, pt_y);
 						}
+						context2.closePath();
+						context2.stroke();
+						context2.fill();
 
+						var poly_center = getCentroid(get_poly_pts);
+						context2.font = "8px Comic Sans MS";
+						context2.fillStyle = "black";
+						context2.textAlign = "center";
+						context2.fillText(get_geo_name+" "+get_geo_uid, poly_center.x/floor_width_meter*img_width, (floor_height_meter - poly_center.y)/floor_height_meter*img_height); 
+						
+						</script>
+						<?php
+						$geometry_row = $getgeoresult2->fetch_assoc();
 					}
+				}
 
 					?>
 
@@ -496,7 +507,7 @@ if(isset($_POST["choose"]) || isset($_POST["chs_connector"]) || isset($_POST["db
 							<input type="radio" name="geo_type" value = "6" >Commodities
 						</div>
 						<div class = "line">
-							<input type = "test" id = "poly_pts" size = "200" value = "" />
+							<input type = "test" id = "poly_pts" size = "100" value = "" />
 						</div>
 						<div class="hidden">
 							<input type = "hidden" id = "buildingid" value = "<?php echo $sel_buildingid; ?>" />
@@ -606,7 +617,7 @@ if(isset($_POST["choose"]) || isset($_POST["chs_connector"]) || isset($_POST["db
 								currentShape.setCoords();
 
 								var points = currentShape.get("points");
-								console.log(points);
+								//console.log(points);
 								var polygonCenter = currentShape.getCenterPoint();
 
 								translatedPoints = currentShape.get('points').map(function(p) {
@@ -617,13 +628,13 @@ if(isset($_POST["choose"]) || isset($_POST["chs_connector"]) || isset($_POST["db
 								});
 
 								for(var i = 0; i<translatedPoints.length; i++){
-									translatedPoints[i].x = (translatedPoints[i].x/img_width*floor_width_meter).toFixed(3);
-									translatedPoints[i].y = (translatedPoints[i].y/img_height*floor_height_meter).toFixed(3);
+									translatedPoints[i].x = parseFloat((translatedPoints[i].x/img_width*floor_width_meter).toFixed(3));
+									translatedPoints[i].y = parseFloat((translatedPoints[i].y/img_height*floor_height_meter).toFixed(3));
 
 									$("#points").append(i+". x: "+translatedPoints[i].x+" y: "+translatedPoints[i].y+"<br>");
 								}
 								var ptsJson = JSON.stringify(translatedPoints);
-								console.log(ptsJson);
+
 								document.getElementById("poly_pts").value = ptsJson;
 
 							} else {
@@ -902,9 +913,7 @@ if(isset($_POST["dbl_connector"])){
 	canvas.on('mouse:down', function(o){
 		canvas.clear();
 		var pointer = canvas.getPointer(o.e);
-		//var y = pointer.y;
-		//var x = pointer.x;
-		canvas.add(new fabric.Circle({ radius: 5, fill: 'black', top: pointer.y, left: pointer.x }));
+		canvas.add(new fabric.Circle({ radius: 3, fill: 'black', top: pointer.y, left: pointer.x }));
 		canvas.item(0).hasControls = false;
 		canvas.setActiveObject(canvas.item(0));
 
@@ -938,9 +947,7 @@ if(isset($_POST["dbl_connector"])){
 	canvas2.on('mouse:down', function(o){
 		canvas2.clear();
 		var pointer = canvas2.getPointer(o.e);
-		//var y = pointer.y;
-		//var x = pointer.x;
-		canvas2.add(new fabric.Circle({ radius: 5, fill: 'black', top: pointer.y, left: pointer.x }));
+		canvas2.add(new fabric.Circle({ radius: 3, fill: 'black', top: pointer.y, left: pointer.x }));
 		canvas2.item(0).hasControls = false;
 		canvas2.setActiveObject(canvas.item(0));
 
@@ -1001,12 +1008,8 @@ if(isset($_POST["robot_path"])){
 	var horizontal_num = Math.floor(floor_height_meter/step); 
 	var vertical_num = Math.floor(floor_width_meter/step);
 
-	//alert(horizontal_num);
-	//alert(vertical_num);
-
 	for(var i = 1; i<horizontal_num+1; i++){
 		var hor_line_y = img_height-step*i*img_height/floor_height_meter;
-		//console.log(i+" "+hor_line_y);
 		var points = [0,hor_line_y,img_width, hor_line_y];
 		var hor_line = new fabric.Line(points, {
 			strokeWidth: 1,
@@ -1158,17 +1161,13 @@ $(document).on("click", ".divide", function() {
 	var include_head = $('input[name='+head_id+']:checked').val();
 	var tail_id = "include_tail"+count;
 	var include_tail = $('input[name='+tail_id+']:checked').val();
-	//console.log("x1y1 "+x1_val+" "+y1_val);
-	//console.log("x2y2 "+x2_val+" "+y2_val);
 	//include head but not tail
 	divide_num = parseInt(divide_num);
-	//console.log(divide_num);
 	if(include_head === "true" && include_tail === "false"){
 		//console.log("include head not include tail");
 		for(var i = 0; i<divide_num; i++){
 			x = x1_val+(x2_val-x1_val)*i/divide_num;
 			y = y1_val+(y2_val-y1_val)*i/divide_num;
-			//console.log(i+" "+x+" "+y);
 			var circle = new fabric.Circle({ radius: 2, fill: '#5ff',  top: y, left: x, opacity:0.8});
 			circle.originX='center';
 			circle.originY='center';
@@ -1180,11 +1179,9 @@ $(document).on("click", ".divide", function() {
 		}
 	}
 	if(include_head === "false" && include_tail === "true"){
-		//console.log("not include head include tail");
 		for(var i = 0; i<divide_num; i++){
 			x = x1_val+(x2_val-x1_val)*(i+1)/divide_num;
-			y = y1_val+(y2_val-y1_val)*(i+1)/divide_num;
-			//console.log(i+" "+x+" "+y);	
+			y = y1_val+(y2_val-y1_val)*(i+1)/divide_num;	
 			var circle = new fabric.Circle({ radius: 2, fill: '#5ff',  top: y, left: x, opacity:0.8});
 			circle.originX='center';
 			circle.originY='center';
@@ -1195,7 +1192,6 @@ $(document).on("click", ".divide", function() {
 		}
 	}
 	if(include_head === "true" && include_tail === "true"){
-		//console.log("include head include tail");
 		for(var i = 0; i<divide_num+1; i++){
 			x = x1_val+(x2_val-x1_val)*i/divide_num;
 			y = y1_val+(y2_val-y1_val)*i/divide_num;
@@ -1210,11 +1206,9 @@ $(document).on("click", ".divide", function() {
 		}
 	}
 	if(include_head === "false" && include_tail === "false"){
-		//console.log("not include head not include tail");
 		for(var i = 0; i<divide_num-1; i++){
 			x = x1_val+(x2_val-x1_val)*(i+1)/divide_num;
-			y = y1_val+(y2_val-y1_val)*(i+1)/divide_num;
-			//console.log(i+" "+x+" "+y);	
+			y = y1_val+(y2_val-y1_val)*(i+1)/divide_num;	
 			var circle = new fabric.Circle({ radius: 2, fill: '#5ff',  top: y, left: x, opacity:0.8});
 			circle.originX='center';
 			circle.originY='center';
@@ -1272,7 +1266,7 @@ if(isset($_POST["robot_sample"])){
 			var x2 = <?php echo $x2; ?>;
 			var y1 = <?php echo $y1; ?>;
 			var y2 = <?php echo $y2; ?>;
-			console.log("x1: "+x1+" y1: "+y1+" x2: "+x2+" y2: "+y2);
+			//console.log("x1: "+x1+" y1: "+y1+" x2: "+x2+" y2: "+y2);
 			var points = [x1,y1,x2,y2];
 			var line = new fabric.Line(points, {
 				strokeWidth: 1,

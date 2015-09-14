@@ -3,11 +3,11 @@ $geoid = filter_input(INPUT_POST, "geo_id", FILTER_SANITIZE_STRING);
 $parentid = filter_input(INPUT_POST, "parent_id", FILTER_SANITIZE_STRING);
 $buildingid = filter_input(INPUT_POST, "building_id", FILTER_SANITIZE_STRING);
 $floornumber = filter_input(INPUT_POST, "floor_number", FILTER_SANITIZE_STRING);
-$geointro = filter_input(INPUT_POST, "geo_intro", FILTER_SANITIZE_STRING);
-$geodetail = filter_input(INPUT_POST, "geo_detail", FILTER_SANITIZE_STRING);
+$geointro = json_encode($_POST["geo_intro"]);
+$geodetail = json_encode($_POST["geo_detail"]);
 $geotype = filter_input(INPUT_POST, "geo_type", FILTER_SANITIZE_STRING);
 $pts_str = $_POST["geo_pts"];
-//$pts_str = json_encode($pts_arr);
+//$pts_str = json_encode($pts_str);
 
 
 require_once "config.php";
@@ -18,9 +18,9 @@ require_once "config.php";
 		die();
 	}
 
-	$query = "INSERT INTO cornell_map_server_geometry(uid, building_id, floor_number, parent_uid, introduction, detail, geometry, geometry_type) VALUES($geoid, $buildingid, $floornumber, $parentid, '$geointro', '$geodetail', '$pts_str', $geotype)";
+	$query = "INSERT INTO cornell_map_server_geometry(uid, building_id, floor_number, parent_uid, introduction, detail, geometry, geometry_type) VALUES($geoid, $buildingid, $floornumber, $parentid, $geointro, $geodetail, '$pts_str', $geotype)";
 	if(intval($geotype)>4){
-		$query = "INSERT INTO cornell_map_server_geometry(uid, building_id, floor_number, parent_uid, introduction, detail, geometry, geometry_type) VALUES($geoid, NULL, NULL, $parentid, '$geointro', '$geodetail', '$pts_str', $geotype)";	
+		$query = "INSERT INTO cornell_map_server_geometry(uid, building_id, floor_number, parent_uid, introduction, detail, geometry, geometry_type) VALUES($geoid, NULL, NULL, $parentid, $geointro, $geodetail, '$pts_str', $geotype)";	
 	}
 	
 	

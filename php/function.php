@@ -21,4 +21,27 @@ function getimgsize($url, $referer = ''){
 
 	return $return;
 }
+
+
+function insidePoly($x,$y,$poly){
+	$n = count($poly);
+	$inside = false;
+	$x1 = floatval($poly[0]->x);
+	$y1 = floatval($poly[0]->y);
+	for($i = 0; $i<$n+1; $i++){
+		$x2 = floatval($poly[$i%$n]->x);
+		$y2 = floatval($poly[$i%$n]->y);
+		if($y>min($y1, $y2) && $y<=max($y1, $y2) && $x<=max($x1, $x2)){
+			if($y1!==$y2){
+				$xints = ($y-$y1)*($x2-$x1)/($y2-$y1)+$x1;
+			}
+			if($x1 === $x2 || $x < $xints){
+				$inside = !$inside;
+			}
+		}
+		$x1 = $x2;
+		$y1 = $y2;
+	}
+	return $inside;
+}
 ?>

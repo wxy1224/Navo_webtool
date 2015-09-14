@@ -12,10 +12,11 @@ $(document).ready(function() {
         var poly_pts = document.getElementById("poly_pts").value;
 
         //alert(JSON.stringify(poly_pts));
+       // alert(buildingid);
 
         console.log(poly_pts);
         
-        var request_geo = {geo_id: geoid, parent_id: parentid, building_id:buildingid, floor_number: floornumber, geo_intro: geointro, geo_detail: geodetail, geo_type:geotype, geo_pts: poly_pts};
+        var request_geo = {geo_id: geoid, parent_id: parentid, building_id: buildingid, floor_number: floornumber, geo_intro: geointro, geo_detail: geodetail, geo_type:geotype, geo_pts: poly_pts};
     
         var request = $.ajax({
             url: 'php/submit_ajax.php',
