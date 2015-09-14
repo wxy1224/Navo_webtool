@@ -1325,7 +1325,94 @@ if(isset($_POST["robot_sample"])){
 
 }
 if(isset($_POST["add_vertices"])){
-	
+	?>
+	<script>
+	var canvas = new fabric.Canvas('mapcanvas2', { selection: false });
+	var activeObject;
+	var isMove = false;
+	canvas.on('mouse:down', function(o){
+		var pointer = canvas.getPointer(o.e);
+
+		activeObject = canvas.getActiveObject();
+		//console.log(activeObject);
+		if(!isMove && !activeObject){
+			canvas.add(new fabric.Circle({ 
+				radius: 1, 
+				fill: 'navy', 
+				top: pointer.y, 
+				left: pointer.x, 
+				lockScalingX : true,
+				locakScalingY : true,
+				hasControls : false,
+				selectable : true
+	  		}));
+	  		console.log("add point");
+	  		canvas.renderAll();
+		}else{
+			if(isMove){
+				isMove = false;
+				activeObject = null;
+			}			
+		}		
+	});
+
+	canvas.on('mouse:move',function(o){
+		var pointer = canvas.getPointer(o.e);
+		if(activeObject){
+			activeObject.setLeft(pointer.x);
+			activeObject.setTop(pointer.y);		
+			canvas.renderAll();	
+			isMove = true;
+		}
+	});
+
+	</script>
+
+	<div class = "line">
+		<div class="submit">
+			<input type="button" name="submit_vert" id="submit_vert" value = "submit">
+		</div>
+		<div class="submit">
+			<input type="button" name="clc_vert_canvas" id="clc_vert_canvas" value = "clear canvas">
+		</div>
+		<input type = "hidden" id = "buildingid" value = "<?php echo $sel_buildingid; ?>" />
+		<input type = "hidden" id = "floornumber" value = "<?php echo $floor_number; ?>" />
+	</div>
+
+	<script>
+		$(document).ready(function() {
+    		$(document).on("click", "#submit_vert", function() {
+    			var building_id = document.getElementById("buildingid").value;
+    			var floor_number = document.getElementById("floornumber").value;
+    			var array = [];
+    			var objs = canvas.getObjects().map(function(o) {
+  					array.push({x:o.left, y:o.top})
+				});
+				var jsonString = JSON.stringify(array);
+				var vert_request = {buildingid: building_id, floornumber: floor_number, vertices: jsonString};
+				var request = $.ajax({
+            		url: 'php/submit_vert_ajax.php',
+            		method: 'POST',
+            		data: vert_request,
+            		dataType: 'text',
+            		error: function(error) {
+            		    console.log(error);
+            		}
+        		});
+
+        		request.success(function(data) {
+        	    	alert(data);
+        	    	if(data.indexOf("unsuccessful") <0){
+        	    		canvas.clear().renderAll();
+        	    	}
+        		});
+
+    		});
+		});
+
+	</script>
+
+	<?php
 }
 ?>
 
