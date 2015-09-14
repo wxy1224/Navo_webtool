@@ -10,6 +10,7 @@ $y2 = filter_input(INPUT_POST, "y2", FILTER_SANITIZE_STRING);
 //$connectors = filter_input(INPUT_POST, "connectors", FILTER_SANITIZE_STRING);
 $building_id = filter_input(INPUT_POST, "building_id", FILTER_SANITIZE_STRING);
 //$connectors = $_POST["connectors"];
+$con_dir = $_POST["direction"];
 
 require_once "config.php";
 $mysqli = new mysqli( DB_HOST, DB_USER, DB_PASSWORD, DB_NAME );
@@ -39,6 +40,7 @@ $con_json[$num_con]["y1"] = floatval($y1);
 $con_json[$num_con]["x1"] = floatval($x1);
 $con_json[$num_con]["rid2"] = intval($rid2);
 $con_json[$num_con]["rid1"] = intval($rid1);
+$con_json[$num_con]["dir"] = intval($con_dir);
 
 $con_str = json_encode($con_json);
 

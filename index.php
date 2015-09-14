@@ -41,7 +41,7 @@ if ($mysqli->connect_error) {
 $buildingquery = "SELECT * FROM cornell_map_server_building";
 $buildingresult = $mysqli->query($buildingquery);
 //echo $buildingresult->num_rows;
-if(isset($_POST["choose"]) || isset($_POST["chs_connector"]) || isset($_POST["dbl_connector"]) || isset($_POST["robot_path"]) || isset($_POST["robot_sample"])){
+if(isset($_POST["choose"]) || isset($_POST["chs_connector"]) || isset($_POST["dbl_connector"]) || isset($_POST["robot_path"]) || isset($_POST["robot_sample"]) || isset($_POST["add_vertices"])){
 	$sel_buildingid = $_POST["building"];
 	//echo $sel_buildingid;
 	$sel_floorid = $_POST["floor"];
@@ -178,6 +178,9 @@ if(isset($_POST["choose"]) || isset($_POST["chs_connector"]) || isset($_POST["db
 				</div>
 				<div class="menuitem" id="robot_sample">
 					<input name="robot_sample" type="submit" value="see robot sample">
+				</div>
+				<div class="menuitem" id="add_vertices">
+					<input name="add_vertices" type="submit" value="add vertices">
 				</div>
 			</form>
 
@@ -767,6 +770,10 @@ canvas.on('mouse:up', function(o){
 			<input type="text" name="y2" id="y2" value="<?php echo $y2; ?>" required/>
 		</div>
 	</div>
+	<div class="line">
+		<input type="radio" name="dbl_con_dir" value = "1" >One way connector
+		<input type="radio" name="dbl_con_dir" value = "2" checked>Two way connector
+	</div>
 	<div class="hidden">
 		<input type="hidden" id="hidden_connectors" value = '<?php echo $all_connectors_str; ?>' />
 		<input type="hidden" id="hidden_buildingid" value = '<?php echo $sel_buildingid; ?>' />
@@ -884,6 +891,10 @@ if(isset($_POST["dbl_connector"])){
 				<label for="y2">y2:</label>
 				<input type="text" name="y2" id="y2" value="<?php echo $y2; ?>" required/>
 			</div>
+		</div>
+		<div class="line">
+			<input type="radio" name="dbl_con_dir" value = "1" >One way connector
+			<input type="radio" name="dbl_con_dir" value = "2" checked>Two way connector
 		</div>
 		<div class="hidden">
 			<input type="hidden" id="hidden_connectors" value = '<?php echo $all_connectors_str; ?>' />
@@ -1313,7 +1324,9 @@ if(isset($_POST["robot_sample"])){
 
 
 }
-
+if(isset($_POST["add_vertices"])){
+	
+}
 ?>
 
 </div>
