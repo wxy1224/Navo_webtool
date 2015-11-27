@@ -44,10 +44,4 @@ function insidePoly($x,$y,$poly){
 	}
 	return $inside;
 }
-
-function meter_to_coord($x,$y,$floor_width,$floor_height,$img_width,$img_height){
-	$x_coord = $x/$floor_width*$img_width;
-	$y_coord = ($floor_height-$y)/$floor_height*$img_height;
-	return array($x_coord,$y_coord);
-}
 ?>
